@@ -1,0 +1,61 @@
+﻿@model Floreria.Models.ViewModels.PedidoVM
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4>Eliminar Pedido</h4>
+        <form asp-action="EliminarPedido" asp-controller="GestionPedido" method="post">
+            <input type="hidden" asp-for="oPedido.IdPedido" />
+
+            <div class="mb-2">
+                <label class="form-label">ID de Pedido</label>
+                <input class="form-control form-control-sm" value="@Model.oPedido?.IdPedido" readonly />
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Cliente</label>
+                <input class="form-control form-control-sm" value="@Model.oPedido.oCliente?.NombreCliente" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección de entrega</label>
+                <input class="form-control" value="@Model.oPedido.oEntrega?.DireccionEntrega" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Referencia de la dirección</label>
+                <input class="form-control" value="@Model.oPedido.oEntrega?.ReferenciaDomicilio" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha y hora de entrega</label>
+                <input class="form-control" value="@Model.oPedido.oEntrega?.FechaHoraEntrega" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Total de pedido</label>
+                <input class="form-control" value="@Model.oPedido.oPago?.TotalPedido" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha del pedido</label>
+                <input class="form-control" value="@Model.oPedido?.FechaPedido" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Estado del pedido</label>
+                <input class="form-control" value="@Model.oPedido?.EstadoPedido" readonly  />
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+                <a class="btn btn-dark" asp-action="Pedido" asp-controller="GestionPedido">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model Floreria.Models.ContactViewModel
+
+@{
+    ViewData["Title"] = "Formulario de contacto";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!--Se usa el metodo post para enviar el formulario-->
+@using (Html.BeginForm("Send", "Contact", FormMethod.Post, new { @class = "contact-form" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nombre)
+        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Nombre)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CorreoElectronico)
+        @Html.TextBoxFor(model => model.CorreoElectronico, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CorreoElectronico)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mensaje)
+        @Html.TextAreaFor(model => model.Mensaje, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Mensaje)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+}
+<br />
+
+<!--Mensaje de exito si el correo fue enviado-->
+@if (TempData["MessageSend"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MessageSend"]
+    </div>
+}

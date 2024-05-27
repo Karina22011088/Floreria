@@ -1,0 +1,109 @@
+﻿@model Floreria.Models.ViewModels.PedidoVM
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@if (Model.oPedido.IdPedido == 0)
+{
+    <h1>Crear Pedido</h1>
+}
+else
+{
+    <h1>Editar Pedido</h1>
+}
+
+<!--Sección para crear o actualizar un pedido-->
+<div class="row">
+    <div class="col-sm-4">
+        <form id="pedidoForm" asp-action="DetallePedido" asp-controller="GestionPedido" method="post">
+            <input type="hidden" asp-for="oPedido.IdPedido" />
+
+            <div class="mb-2">
+                <label class="form-label" asp-for="oPedido.IdCliente">Cliente</label>
+                <select class="form-select form-select-sm" asp-for="oPedido.IdCliente" asp-items="@Model.oListaClientes" required>
+                    <option value="" selected disabled>-- Seleccionar --</option>
+                </select>
+                <span asp-validation-for="oPedido.IdCliente" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="oPedido.oEntrega.DireccionEntrega">Dirección de entrega</label>
+                <input class="form-control" asp-for="oPedido.oEntrega.DireccionEntrega" type="text" required />
+                <span asp-validation-for="oPedido.oEntrega.DireccionEntrega" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="oPedido.oEntrega.ReferenciaDomicilio">Referencia de la dirección</label>
+                <input class="form-control" asp-for="oPedido.oEntrega.ReferenciaDomicilio" type="text" required />
+                <span asp-validation-for="oPedido.oEntrega.ReferenciaDomicilio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="oPedido_oEntrega_FechaHoraEntrega">Fecha y hora de entrega</label>
+                <div class="input-group">
+                    <input class="form-control" id="oPedido_oEntrega_FechaHoraEntrega" name="oPedido.oEntrega.FechaHoraEntrega" type="datetime-local" required />
+                </div>
+                <span asp-validation-for="oPedido.oEntrega.FechaHoraEntrega" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="oPedido.oPago.TotalPedido">Total de pedido</label>
+                <input class="form-control" asp-for="oPedido.oPago.TotalPedido" type="text" required />
+                <span asp-validation-for="oPedido.oPago.TotalPedido" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="oPedido.FechaPedido">Fecha del pedido</label>
+                <input class="form-control" asp-for="oPedido.FechaPedido" type="date" required />
+                <span asp-validation-for="oPedido.FechaPedido" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="oPedido.EstadoPedido">Estado del pedido</label>
+                <select class="form-select" asp-for="oPedido.EstadoPedido" required>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Completado">Completado</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+                <span asp-validation-for="oPedido.EstadoPedido" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                @if (Model.oPedido.IdPedido == 0)
+                {
+                    <button class="btn btn-primary btn-sm w-25" type="submit">Crear</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary btn-sm w-25" type="submit">Actualizar</button>
+                }
+                <a class="btn btn-dark" asp-action="Pedido" asp-controller="GestionPedido">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#pedidoForm').submit(function (event) {
+                var fechaPedido = new Date($('#oPedido_FechaPedido').val());
+                var fechaEntrega = new Date($('#oPedido_oEntrega_FechaHoraEntrega').val());
+
+                if (fechaEntrega < fechaPedido) {
+                    event.preventDefault(); // Evitar que se envíe el formulario
+                    alert('La fecha de entrega debe ser mayor o igual a la fecha del pedido.');
+                }
+            });
+        });
+    </script>
+
+
+}

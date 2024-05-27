@@ -1,0 +1,105 @@
+﻿@model List<Floreria.Models.Pedido>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5>Lista de Pedidos</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <input class="form-control form-control-sm" id="buscarEstado" type="text" placeholder="Buscar por estado de pedido">
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-success btn-sm" asp-action="DetallePedido" asp-controller="GestionPedido" asp-route-idPedido="0">Crear Pedido</a>
+                <a class="btn btn-success btn-sm" asp-action="DetalleCliente" asp-controller="GestionPedido" asp-route-idCliente="0">Crear Cliente</a>
+                <a class="btn btn-primary btn-sm" id="btnPDFPedidos">Generar PDF</a>
+            </div>
+        </div>
+        <hr />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No. Pedido</th>
+                    <th>Nombre o alias del cliente</th>
+                    <th>Dirección de entrega</th>
+                    <th>Referencia de la dirección</th>
+                    <th>Fecha y hora de entrega</th>
+                    <th>Total de pedido</th>
+                    <th>Fecha del pedido</th>
+                    <th>Estado del pedido</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdPedido</td>
+                        <td>@item.oCliente?.NombreCliente</td>
+                        <td>@item.oEntrega?.DireccionEntrega</td>
+                        <td>@item.oEntrega?.ReferenciaDomicilio</td>
+                        <td>@item.oEntrega?.FechaHoraEntrega</td>
+                        <td>@string.Format("{0:C}", item.oPago?.TotalPedido)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FechaPedido)</td>
+                        <td>@item.EstadoPedido</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" asp-action="DetallePedido" asp-controller="GestionPedido" asp-route-idPedido="@item.IdPedido">Editar</a>
+                            <a class="btn btn-danger btn-sm" asp-action="EliminarPedido" asp-controller="GestionPedido" asp-route-idPedido="@item.IdPedido">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    @* JavaScript para filtrar la tabla por estado del pedido *@
+    <script>
+        $(document).ready(function () {
+            $('#buscarEstado').on('keyup', function () {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("buscarEstado");
+                filter = input.value.toUpperCase();
+                table = document.getElementsByTagName("table")[0];
+                tr = table.getElementsByTagName("tr");
+
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[7]; // Se cambia el índice a 1 para la segunda columna (Nombre o alias del cliente)
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            });
+
+            //Evitar la propagación de eventos en el teclado en el campo de búsqueda
+            $('#buscarEstado').on('keydown', function (event) {
+                event.stopImmediatePropagation();
+            });
+        });
+    </script>
+
+
+    @* JavaScript para imprimir todos los pedidos *@
+    <script>
+        $(document).ready(function () {
+            $('#btnPDFPedidos').click(function () {
+                // Redirige al controlador para generar el PDF
+                window.location.href = '@Url.Action("GenerarPDFPedidos", "GestionPedido")';
+            });
+        });
+    </script>
+
+}
